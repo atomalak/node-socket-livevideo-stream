@@ -3,8 +3,6 @@
    <head>
       <meta charset="utf8"/>
       <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes"/>
-      
-      <script src="/js/jquery-1.11.3.min.js"></script>
       <script src="/socket.io/socket.io.js"></script>
       <title>Socket-IO</title>
      
@@ -59,9 +57,9 @@
           }, 100);
 
           socket.on("receiveVideo", function(video) {
-              $("#play").attr("src",video);
-              
-          });
+              var image=document.getElementById("play");
+			  image.src=video;
+		});
 
         
          

@@ -16,6 +16,3 @@ app.get("/index.html",function(req,resp){
    resp.sendFile(path.join(__dirname+"/index.html"));
 });
 
-app.get("/view.html",function(req,resp){
-   resp.sendFile(path.join(__dirname+"/view.html"));
-});
