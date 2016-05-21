@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta charset="utf8"/>
+      <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes"/>
+      
+      <script src="/js/jquery-1.11.3.min.js"></script>
+      <script src="/socket.io/socket.io.js"></script>
+      <title>Socket-IO</title>
+     
+   </head>
+   <body>
+      <video src="" id="video" style="width:100px;height:100px;display:none"></video>
+      <canvas id="preview" ></canvas><br/>
+      <img id="play"/>
+      <script type="text/javascript">
+          var socket = io.connect();
+          var canvas = document.getElementById("preview");
+          var context = canvas.getContext("2d");
+          canvas.width = 100;
+          canvas.height = 100;
+          context.width = canvas.width;
+          context.height = canvas.height;
+
+
+          function shareVideo(video, context) {
+              context.drawImage(video, 0, 0, context.width, context.height);
+              socket.emit("shareVideo", canvas.toDataURL("image/png"));
+          }
+
+          failBack = function(error) {
+              console.log("Video capture error: ", error.code);
+          };
+
+          // Put video listeners into place
+          var videoObj = {
+              "video": true,
+              "audio": true
+          };
+          if (navigator.getUserMedia) { // Standard
+              navigator.getUserMedia(videoObj, function(stream) {
+                  video.src = stream;
+                  video.play();
+              }, failBack);
+          } else if (navigator.webkitGetUserMedia) { // WebKit-prefixed
+              navigator.webkitGetUserMedia(videoObj, function(stream) {
+                  video.src = window.URL.createObjectURL(stream);
+                  video.play();
+              }, failBack);
+          } else if (navigator.mozGetUserMedia) { // Firefox-prefixed
+              navigator.mozGetUserMedia(videoObj, function(stream) {
+                  video.src = window.URL.createObjectURL(stream);
+                  video.play();
+              }, failBack);
+          }
+
+          setInterval(function() {
+              shareVideo(video, context);
+          }, 100);
+
+          socket.on("receiveVideo", function(video) {
+              $("#play").attr("src",video);
+              
+          });
+
+        
+         
+      </script>
+   </body>
+</html>
