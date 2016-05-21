@@ -1,7 +1,6 @@
 var express=require("express");
 var path    = require("path");  
 var app=express();
-app.use("/js", express.static(__dirname + path.sep + "js"));
 var server=app.listen(8080,"0.0.0.0");
 var io=require("socket.io").listen(server);
 var path=require("path");
